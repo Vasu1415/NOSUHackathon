@@ -1,5 +1,5 @@
 import os
 
 class Config:
-    SECRET_KEY = os.getenv('SECRET_KEY', 'your_secret_key')
-    OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', 'your_openai_key')
+    SQLALCHEMY_DATABASE_URI="postgresql://postgres.tqlrrlclqtlpbybwrxyv:meow%401234@aws-0-us-east-1.pooler.supabase.com:5432/postgres"
+    SQLALCHEMY_TRACK_MODIFICATIONS=False 
