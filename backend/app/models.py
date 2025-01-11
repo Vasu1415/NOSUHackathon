@@ -6,11 +6,10 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
     profile_picture = db.Column(db.String(200))
     documents = db.relationship('Document', backref='user', lazy=True)
     tests = db.relationship('Test', backref='user', lazy=True)
-
 
 class Document(db.Model):
     __tablename__ = "documents"
