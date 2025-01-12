@@ -5,6 +5,8 @@ from app import db
 from app.models import User
 from app.forms import SignupForm, LoginForm, ForgotPasswordForm
 from app.utils import upload_to_s3
+from werkzeug.utils import secure_filename
+import os, json
 
 bcrypt = Bcrypt()
 api_blueprint = Blueprint('api', __name__)
@@ -86,3 +88,33 @@ def forgot_password():
 @api_blueprint.route("/api/dashboard", methods=["GET"])
 def dashboard():
     return jsonify({"message": "Welcome to the Dashboard!"}), 200
+
+# Upload route
+UPLOAD_FOLDER = 'backend/uploads'
+ALLOWED_EXTENSIONS = {'pdf'}
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@api_blueprint.route('/upload_exam', methods=['POST'])
+def upload_exam():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part in the request'}), 400
+
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No file selected for uploading'}), 400
+
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(file_path)
+        return jsonify({'message': 'File uploaded successfully', 'file_path': file_path}), 200
+    else:
+        return jsonify({'error': 'Allowed file type is pdf'}), 400
