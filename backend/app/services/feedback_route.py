@@ -9,7 +9,6 @@ from sentence_transformers import SentenceTransformer, util
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from inference import DataExtraction
 
-# GITHUB_TOKEN = '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'
 class FeedbackService:
     def __init__(self):
         pass
