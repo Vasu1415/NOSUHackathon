@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 from app.services.feedback_route import FeedbackService
 import os, json, io
 import datetime
+from app.services.feedback_route import FeedbackService
 
 bcrypt = Bcrypt()
 api_blueprint = Blueprint('api', __name__)
@@ -253,3 +254,64 @@ def user_profile():
         "profile_picture": current_user.profile_picture,
     }
     return jsonify(user_data), 200
+
+# Update profile picture route
+@api_blueprint.route("/update-profile-picture", methods=["GET", "POST"])
+@login_required
+def update_profile_picture():
+    profile_picture = request.files.get("profile_picture")
+    folder = "profilepictures"
+
+    if not profile_picture:
+        return jsonify({"error": "Profile picture is required"}), 400
+
+    try:
+        file_url = upload_to_s3(profile_picture, current_user.id, folder, current_app)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    current_user.profile_picture = file_url
+    db.session.commit()
+
+    return jsonify({"message": "Profile picture updated", "profile_picture_url": file_url}), 200
+
+# Mini-Test submit route
+@api_blueprint.route("/mini-test", methods=["POST"])
+@login_required
+def mini_test():
+    data = request.get_json()
+    
+    # expecting input like  {"topic": ..., "correct": [{"question":,"student_answer":, "actual_answer":}], "incorrect":[{"questions":"student_answer":, "actual_answer":}]}
+    topic = data.get("topic")
+    correct_answers = data.get("correct", [])
+    incorrect_answers = data.get("incorrect", [])
+    
+    if not topic or not correct_answers or not incorrect_answers:
+        return jsonify({"message": "Invalid input"}), 400
+
+    total_questions = len(correct_answers) + len(incorrect_answers)
+    correct_count = len(correct_answers)
+    score = (correct_count / total_questions) * 100
+
+    if correct_count >= 6:
+        message = f"Well done! You scored {score}%"
+    else:
+        message = "Try again! You scored {score}%"
+
+    return jsonify({"score": score, "message": message}), 200
+
+@api_blueprint.route("/generate-questions", methods=["POST"])
+@login_required
+def generate_questions():
+    data = request.json
+    topic = data.get("topic")
+    feedback_service = FeedbackService()
+
+    q_prompt = f"Generate 7 multiple choice questions based on the topic {topic} without any introduction or commentary.\
+        Only provide an array of 7 questions and their respective answer choices as a letter (A, B, C, D) as an array at their respoective indices."
+    questions = feedback_service.response_4o(q_prompt, [], 350)
+
+    a_prompt = f"Provide the correct answer for each question as an array of 7 letters (A, B, C, D) at their respective indices. Here are the questions {questions}"
+    answers = feedback_service.response_4o(a_prompt, [], 350)
+    
+    return jsonify({"questions": questions, "answers": answers}), 200
