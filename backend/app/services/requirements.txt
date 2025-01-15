@@ -1,0 +1,9 @@
+torch
+transformers
+numpy<2.0
+pytesseract
+pillow
+tools
+fitz
+PyMuPDF
+opencv

@@ -1,15 +1,38 @@
 from app import db
 from datetime import datetime
+from flask_login import UserMixin
 
-class User(db.Model):
+class User(UserMixin,db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100),nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     profile_picture = db.Column(db.String(200))
     documents = db.relationship('Document', backref='user', lazy=True)
     tests = db.relationship('Test', backref='user', lazy=True)
+    progress_records = db.relationship("UserProgress", backref="user", lazy=True)
+
+
+    def get_id(self):
+        return str(self.user_id)
+    
+    @property
+    def name(self):
+        return f"{self.first_name} {self.last_name}"
+
+class UserProgress(db.Model):
+    __tablename__ = "user_progress"
+    progress_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)    
+    date = db.Column(db.DateTime, default=datetime.utcnow)    
+    current_topics = db.Column(db.Text, nullable=True)    
+    strong_topics = db.Column(db.Text, nullable=True)    
+    weak_topics = db.Column(db.Text, nullable=True)    
+    feedback = db.Column(db.Text, nullable=True)    
+    user = db.relationship("User", backref="progress_records", lazy=True)
+
 
 class Document(db.Model):
     __tablename__ = "documents"

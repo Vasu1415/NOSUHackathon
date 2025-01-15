@@ -13,3 +13,4 @@ flask-bcrypt
 boto3
 botocore
 mimetype
+flask-login

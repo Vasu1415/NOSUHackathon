@@ -7,7 +7,7 @@ from azure.ai.inference.models import UserMessage
 from azure.core.credentials import AzureKeyCredential
 from sentence_transformers import SentenceTransformer, util
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from inference import DataExtraction
+from app.services.data_extraction import DataExtraction
 
 class FeedbackService:
     def __init__(self):
@@ -238,9 +238,9 @@ class FeedbackService:
             topics.append(self.response_4o("Give a list of topics that the question is related to", [question]))
         return topics
     
-    def feedback_route(self, pdf_path, model_choice):
+    def feedback_route(self, pdf, model_choice):
         inference = DataExtraction()
-        question_answer_dict = inference.data_extraction(pdf_path)
+        question_answer_dict = inference.data_extraction(pdf)
         print("received question_answer_dict")
         questions, student_answers = self.extract_questions_answers(question_answer_dict)
         print("extracted questions and student answers")
@@ -272,7 +272,20 @@ class FeedbackService:
                 correct_student_answers.append(student_answers[i])
         
         feedback = self.generate_feedback(wrong_questions, wrong_student_answers, correct_questions, correct_student_answers, model_answers, model_choice)        
-        return feedback
+        
+        wrong_topics = self.get_topics(wrong_questions)
+        correct_topics = self.get_topics(correct_questions)
+
+        result = {
+            "feedback":feedback,
+            "wrong_questions":wrong_questions,
+            "wrong_student_answers":wrong_student_answers,
+            "correct_questions":correct_questions,
+            "correct_student_answers": correct_student_answers,
+            "wrong_topics":wrong_topics,
+            "correct_topics":correct_topics
+        }
+        return result
 
 if __name__ == '__main__':
     model_choice = 'gpt-4o' # get from frontend
