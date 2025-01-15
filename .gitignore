@@ -1,3 +1,7 @@
 backend_env
 __pycache__
+<<<<<<< Updated upstream
 env
+=======
+migrations
+>>>>>>> Stashed changes
