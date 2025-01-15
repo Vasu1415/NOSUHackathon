@@ -1,0 +1,78 @@
+2025-01-15 12:30:16,329 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:50]
+2025-01-15 12:30:30,469 INFO: Login endpoint hit [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:60]
+2025-01-15 12:30:30,473 ERROR: Exception on /api/login [POST] [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py:875]
+Traceback (most recent call last):
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py", line 61, in login
+    form = LoginForm(data=request.form)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/form.py", line 209, in __call__
+    return type.__call__(cls, *args, **kwargs)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask_wtf/form.py", line 73, in __init__
+    super().__init__(formdata=formdata, **kwargs)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/form.py", line 287, in __init__
+    self.process(formdata, obj, data=data, **kwargs)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/form.py", line 128, in process
+    field.process(formdata, data, extra_filters=field_extra_filters)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/csrf/core.py", line 44, in process
+    self.current_token = self.csrf_impl.generate_csrf_token(self)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask_wtf/csrf.py", line 147, in generate_csrf_token
+    return generate_csrf(
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask_wtf/csrf.py", line 36, in generate_csrf
+    secret_key = _get_config(
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask_wtf/csrf.py", line 136, in _get_config
+    raise RuntimeError(message)
+RuntimeError: A secret key is required to use CSRF.
+2025-01-15 12:34:55,396 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:50]
+2025-01-15 12:35:19,143 INFO: Login endpoint hit [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:60]
+2025-01-15 12:35:19,156 ERROR: Exception on /api/login [POST] [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py:875]
+Traceback (most recent call last):
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/validators.py", line 401, in __call__
+    import email_validator
+ModuleNotFoundError: No module named 'email_validator'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py", line 62, in login
+    if not form.validate():
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/form.py", line 330, in validate
+    return super().validate(extra)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/form.py", line 147, in validate
+    if not field.validate(self, extra):
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/fields/core.py", line 234, in validate
+    stop_validation = self._run_validation_chain(form, chain)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/fields/core.py", line 254, in _run_validation_chain
+    validator(form, self)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/validators.py", line 403, in __call__
+    raise Exception(
+Exception: Install 'email_validator' for email validation support.
+2025-01-15 12:36:26,573 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:50]
+2025-01-15 12:36:48,382 INFO: Login endpoint hit [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:60]
+2025-01-15 12:36:48,438 WARNING: Login form validation failed: {'csrf_token': ['The CSRF token is missing.']} [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:63]
+2025-01-15 12:40:50,744 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:50]
+2025-01-15 12:41:27,055 INFO: Login endpoint hit [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:60]
+2025-01-15 12:41:27,129 WARNING: Login form validation failed: {'csrf_token': ['The CSRF tokens do not match.']} [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:63]
+2025-01-15 12:47:47,399 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 12:48:06,176 INFO: Login endpoint hit [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:60]
+2025-01-15 12:48:06,252 WARNING: Login form validation failed: {'csrf_token': ['The CSRF tokens do not match.']} [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:63]
+2025-01-15 12:54:26,765 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 12:59:54,612 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]

@@ -47,7 +47,7 @@ function ForgotPasswordPage(){
     };
 
     return (
-        <div className="min-h-screen flex flex-col justify-center items-center bg-slate-950 text-white p-4">
+        <div className="min-h-screen flex flex-col justify-center items-center bg-black text-white p-4">
             {/*Back Button */}
             <button onClick={() => navigate('/login')} 
                 className="absolute top-4 left-4 p-2 bg-gray-200 text-slate-950 rounded-full hover:bg-gray-300" >
@@ -60,19 +60,19 @@ function ForgotPasswordPage(){
                 <div className="flex flex-col">
                     <label htmlFor="email" className="text-lg text-gray-700 mb-2">Email: </label>
                     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required 
-                        className="text-slate-950 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-600"/>
+                        className="text-slate-950 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"/>
                 </div>
 
                 <div className="flex flex-col">
                     <label htmlFor="newPassword" className="text-lg text-gray-700 mb-2">New Password: </label>
                     <input type={showPassword ? 'text' : 'password'}value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required 
-                        className="text-slate-950 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-600"/>
+                        className="text-slate-950 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"/>
                 </div>
 
                 <div className="flex flex-col">
                     <label htmlFor="confirmNewPassword" className="text-lg text-gray-700 mb-2">Confirm New Password: </label>
                     <input type={showPassword ? 'text' : 'password'} value={confirmNewPassword} onChange={(e) => setNewConfirmPassword(e.target.value)} required 
-                        className="text-slate-950 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-600"/>
+                        className="text-slate-950 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"/>
                 </div>
 
                 <div className='flex items-center'>
@@ -81,10 +81,10 @@ function ForgotPasswordPage(){
                     <label htmlFor="showPassword" className="text-lg text-gray-700">Show Password</label>
                 </div>
 
-                {error && <p className='w-full py-3 text-rose-600 '>{error}</p>}
+                {error && <p className='w-full py-3 text-red-500 '>{error}</p>}
                 {success && <p className='text-green-600 text-center'>{success}</p>}
 
-                <button type='submit' className='w-full py-3 bg-rose-600 text-white font-bold rounded-lg hover:bg-rose-700 disabled:bg-gray-400 disabled:cursor-not-allowed'>Reset Password</button>
+                <button type='submit' className='w-full py-3 bg-red-500 text-white font-bold rounded-lg hover:bg-red-500 disabled:bg-gray-400 disabled:cursor-not-allowed'>Reset Password</button>
             </form>
             
 

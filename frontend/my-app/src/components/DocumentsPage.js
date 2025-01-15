@@ -1,123 +1,97 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaTachometerAlt, FaFileAlt, FaFileUpload } from 'react-icons/fa'; // Import icons
+import { FaTachometerAlt, FaFileAlt, FaFileUpload, FaChartLine, FaFolder } from "react-icons/fa"; // Import icons
 
 const menuItems = [
-    { name: 'Dashboard', path: '/dashboard', icon: <FaTachometerAlt /> },
-    { name: 'Test Grader', path: '/test-grader', icon: <FaFileUpload /> },
-    { name: 'Mini Test', path: '/mini-test', icon: <FaFileAlt /> },
-];
-function Documents (){
+    { name: "Dashboard", path: "/dashboard", icon: <FaTachometerAlt /> },
+    { name: "Test Grader", path: "/test-grader", icon: <FaFileUpload /> },
+    { name: "Mini Test", path: "/mini-test", icon: <FaFileAlt /> },
+    { name: "Documents", path: "/documents", icon: <FaFolder /> },
+    { name: "Progress Tracker", path: "/progress", icon: <FaChartLine /> },
+  ];
+
+function Documents() {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeTab, setActiveTab] = useState('');
-    const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-    const [profilePicture, setProfilePicture] = useState('');
-
+    // const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+    // const [profilePicture, setProfilePicture] = useState('');
 
     const handleNavigation = (path) => {
         navigate(path);
     };
 
     useEffect(() => {
-        // Set the active tab based on the current path
         const currentItem = menuItems.find((item) => item.path === location.pathname);
         if (currentItem) setActiveTab(currentItem.name);
     }, [location.pathname]);
 
+    // useEffect(() => {
+    //     async function fetchProfileData() {
+    //         try {
+    //             const response = await fetch('/api/user-profile'); // Adjust endpoint as necessary
+    //             const data = await response.json();
+    //             setProfilePicture(data.profile_picture_url);
+    //         } catch (error) {
+    //             console.error('Error fetching profile data:', error);
+    //         }
+    //     }
 
-    useEffect(() => {
-        // Fetch user profile data from API
-        async function fetchProfileData() {
-            try {
-                const response = await fetch('/api/user-profile'); // Adjust the endpoint as necessary
-                const data = await response.json();
-                setProfilePicture(data.profile_picture_url);
-            } catch (error) {
-                console.error('Error fetching profile data:', error);
-            }
-        }
+    //     fetchProfileData();
+    // }, []);
 
-        fetchProfileData();
-    }, []);
-
-    const toggleProfileMenu = () => {
-        setProfileMenuOpen((prev) => !prev);
-    };
+    // const toggleProfileMenu = () => {
+    //     setProfileMenuOpen((prev) => !prev);
+    // };
 
     return (
-        <div className="min-h-screen flex flex-col md:flex-row">
+        <div className="min-h-screen flex flex-col md:flex-row bg-black text-white">
             {/* Sidebar */}
-            <aside className="w-full md:w-72 bg-gray-900 text-white p-5 flex-shrink-0">
-                <h1 className="text-3xl font-bold mb-16 text-center text-rose-400">Study Buddy</h1>
+            <aside className="w-full md:w-64 bg-black text-white p-6 border-r border-gray-700 flex-shrink-0">
+                <h1 className="text-3xl font-bold mb-12 text-center text-red-500">Study Buddy</h1>
                 <nav>
-                    <ul className="space-y-20 ">
-                        {menuItems.map((item, index) => (
-                            <li key={item.name} className="relative pb-4">
-                                <div
-                                    onClick={() => handleNavigation(item.path)}
-                                    className={`flex items-center space-x-4 font-semibold text-2xl cursor-pointer  ${
-                                        activeTab === item.name
-                                            ? 'text-rose-400'
-                                            : 'hover:text-rose-400'
-                                    }`}
-                                >
-                                    {item.icon} {/* Icon */}
-                                    <span>{item.name}</span>
-                                </div>
-                                {/* Partial horizontal line */}
-                                {index < menuItems.length - 1 && (
-                                    <div className="absolute left-4 right-4 top-full border-t border-gray-700 mt-8"></div>
-                                )}
-                            </li>
+                    <ul className="space-y-8"> {/* Increased spacing */}
+                        {menuItems.map((item) => (
+                        <li key={item.name}>
+                            <div
+                            onClick={() => handleNavigation(item.path)}
+                            className={`flex items-center space-x-3 p-4 rounded-lg cursor-pointer ${
+                                activeTab === item.name
+                                ? "bg-red-500 text-black"
+                                : "hover:bg-gray-800 hover:text-red-500"
+                            }`}
+                            >
+                            {item.icon}
+                            <span className="font-medium">{item.name}</span>
+                            </div>
+                        </li>
                         ))}
                     </ul>
                 </nav>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 p-6 bg-slate-950 relative">
-                {/* Profile Icon */}
+            <main className="flex-1 p-8 relative">
+                {/* Log Out Button */}
                 <div className="absolute top-6 right-6">
-                    <div className="relative">
-                        {/*MAKE SURE THE PROFILE API CALL IS CORRECTLY*/}
-                        <img src={profilePicture || '/path/to/default-profile.jpg'} alt="Profile"
-                            className="w-12 h-12 rounded-full cursor-pointer border-2 border-rose-400"
-                            onClick={toggleProfileMenu} />
-
-                        {profileMenuOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg">
-                                <ul className="py-2">
-                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold  border-b border-gray-300 text-lg"
-                                        onClick={() => handleNavigation('/update-profile')} >
-                                        Update Profile
-                                    </li>
-                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold border-b border-gray-300 text-lg"
-                                        onClick={() => handleNavigation('/documents')} >
-                                        Documents
-                                    </li>
-                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold border-b border-gray-300 text-lg"
-                                        onClick={() => handleNavigation('/progress')} >
-                                        Progress
-                                    </li>
-                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-red-600 font-semibold text-lg"
-                                        onClick={() => navigate('/logout')} >
-                                        Log out
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
-                    </div>
+                    <button
+                        className="px-6 py-2 bg-red-500 text-black font-semibold rounded-lg hover:bg-red-600 transition"
+                        onClick={() => handleNavigation("/")}
+                    >
+                        Log Out
+                    </button>
                 </div>
 
-                {/*Header */}
-                <header className='mb-8 text-center'>
-                    <h2 className="text-6xl font-bold text-center mt-20 text-white">Documents</h2>
-                    <p className="text-gray-400 mt-2 text-center text-2xl">See your uploaded documents below.</p>
-
+                {/* Header */}
+                <header className="mb-12 text-center">
+                    <h2 className="text-4xl font-bold text-red-500">Documents</h2>
+                    <p className="text-gray-400 mt-2 text-lg">
+                        See your uploaded documents below.
+                    </p>
                 </header>
             </main>
         </div>
     );
 }
+
 export default Documents;

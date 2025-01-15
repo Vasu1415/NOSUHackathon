@@ -20,10 +20,13 @@ api_blueprint = Blueprint('api', __name__)
 def redirect_to_signup():
     return jsonify({"message": "Redirect to /signup handled by React"}), 301
 
+# Signup route with logging
 @api_blueprint.route("/signup", methods=["POST"])
 def signup():
+    current_app.logger.info("Signup endpoint hit")
     form = SignupForm(data=request.form)
     if not form.validate():
+        current_app.logger.warning(f"Signup form validation failed: {form.errors}")
         return jsonify({"errors": form.errors}), 400
 
     first_name = form.first_name.data
@@ -32,15 +35,18 @@ def signup():
     password = form.password.data
     profile_picture = request.files.get("profile_picture")
     folder = "profilepictures"  
-    
-    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-    new_user = User(first_name=first_name,last_name=last_name,email=email, password=hashed_password)
+    current_app.logger.info(f"Creating user: {email}")
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    new_user = User(first_name=first_name, last_name=last_name, email=email, password=hashed_password)
     db.session.add(new_user)
+
     try:
         db.session.commit()
-    except IntegrityError:
+        current_app.logger.info(f"User {email} created successfully")
+    except IntegrityError as e:
         db.session.rollback()
+        current_app.logger.error(f"Error creating user {email}: {str(e)}")
         return jsonify({"message": "Error creating user"}), 500
 
     user_id = new_user.user_id
@@ -49,10 +55,22 @@ def signup():
             file_url = upload_to_s3(profile_picture, user_id, folder, current_app)
             new_user.profile_picture = file_url
             db.session.commit()
+            current_app.logger.info(f"Profile picture uploaded for user {email}")
         except Exception as e:
+            current_app.logger.error(f"Error uploading profile picture for user {email}: {str(e)}")
             return jsonify({"message": f"Error uploading profile picture: {str(e)}"}), 500
 
     return jsonify({"message": "Signup successful", "profile_picture_url": new_user.profile_picture}), 201
+
+from itsdangerous import URLSafeTimedSerializer, BadData
+
+def validate_static_csrf(csrf_token, secret_key):
+    serializer = URLSafeTimedSerializer(secret_key)
+    try:
+        token = serializer.loads(csrf_token, max_age=3600)  # Token expires after 1 hour
+        return token == 'csrf-token'
+    except BadData:
+        return False
 
 # Login route
 @api_blueprint.route("/login", methods=["POST"])
@@ -67,6 +85,7 @@ def login():
     user = User.query.filter_by(email=email).first()
     if not user or not bcrypt.check_password_hash(user.password, password):
         return jsonify({"message": "Invalid email or password"}), 401
+
     login_user(user)
     return jsonify({"message": "Login successful", "redirect": "/dashboard"}), 200
 
@@ -100,9 +119,11 @@ def logout():
 
 @api_blueprint.route("/is_logged_in", methods=["GET"])
 def is_logged_in():
+    current_app.logger.info(f"User authenticated: {current_user.is_authenticated}")
     if current_user.is_authenticated:
         return jsonify({"logged_in": True, "user": {"name": current_user.name, "email": current_user.email}}), 200
-    return jsonify({"logged_in": False}), 200
+    return jsonify({"logged_in": False}), 401
+
 
 # Protected Dashboard Route
 @api_blueprint.route("/dashboard", methods=["GET"])
@@ -111,80 +132,123 @@ def dashboard():
     return jsonify({"message": f"Welcome {current_user.name} to the Dashboard!"}), 200
 
 @api_blueprint.route('/test-grader', methods=["POST"])
-@login_required
 def document_pipeline():
+    # Debugging: Log the route hit
+    print("DEBUG: Document pipeline endpoint hit.")
+
+    # Debugging: Log raw request data
+    print(f"DEBUG: Raw request.form: {request.form}")
+    print(f"DEBUG: Raw request.files: {request.files}")
+
+    # Initialize the form and validate
     form = DocumentTestGraderForm()
     if not form.validate_on_submit():
+        print(f"DEBUG: Form validation failed: {form.errors}")
         return jsonify({"errors": form.errors}), 400
-    
-    document = form.document.data
-    document_name = document.filename
-    model_selected = form.model.data
 
-    file_bytes = io.BytesIO(document.read())
+    # Extract form data
+    try:
+        document = form.document.data
+        document_name = document.filename
+        model_selected = form.model.data
+        print(f"DEBUG: Received document: {document_name} with model: {model_selected}")
+    except Exception as e:
+        print(f"ERROR: Error extracting form data: {e}")
+        return jsonify({"error": "Invalid form data"}), 400
+
+    # Read file bytes
+    try:
+        file_bytes = io.BytesIO(document.read())
+        print(f"DEBUG: File bytes successfully read for document: {document_name}")
+    except Exception as e:
+        print(f"ERROR: Error reading file bytes for document: {document_name}. Error: {e}")
+        return jsonify({"error": str(e)}), 500
 
     # S3 folder name
     folder = "documents"
 
-    # Attempt to upload the document to S3
+    # Upload the document to S3
     try:
-        document.seek(0)
-        file_url = upload_to_s3(document, current_user.id, folder, current_app)
+        document.seek(0)  # Reset the file pointer
+        file_url = upload_to_s3(document, 1, folder, current_app)  # Replace `1` with a generic user ID or logic
+        print(f"DEBUG: Document successfully uploaded to S3: {file_url}")
     except Exception as e:
+        print(f"ERROR: Error uploading document to S3: {document_name}. Error: {e}")
         return jsonify({"error": str(e)}), 500
-
-    # Pass a copy of the bytes to your feedback service
+    
     feedback_service = FeedbackService()
-    user_feedback_result_dict = feedback_service.feedback_route(file_bytes, model_selected)
+    try:
+        user_feedback_result_dict = feedback_service.feedback_route(file_bytes, model_selected)
+    except Exception as e:
+        print(f"ERROR: Feedback service failed. Error: {e}")
 
-    wrong_topics = user_feedback_result_dict.get("wrong_topics", [])
-    correct_topics = user_feedback_result_dict.get("correct_topics", [])
+    # Process feedback service
+    # try:
+    #     feedback_service = FeedbackService()
+    #     user_feedback_result_dict = feedback_service.feedback_route(file_bytes, model_selected)
+    #     print(f"DEBUG: Feedback service processed successfully for document: {document_name}")
+    # except Exception as e:
+    #     print(f"ERROR: Error processing feedback for document: {document_name}. Error: {e}")
+    #     return jsonify({"error": str(e)}), 500
 
-    wrong_question_topics = set()
-    for topic_list in wrong_topics:
-        for t in topic_list:
-            wrong_question_topics.add(t.strip())
+    # # Categorize topics
+    # try:
+    #     wrong_topics = user_feedback_result_dict.get("wrong_topics", [])
+    #     correct_topics = user_feedback_result_dict.get("correct_topics", [])
 
-    correct_question_topics = set()
-    for topic_list in correct_topics:
-        for t in topic_list:
-            correct_question_topics.add(t.strip())
+    #     wrong_question_topics = set(t.strip() for topic_list in wrong_topics for t in topic_list)
+    #     correct_question_topics = set(t.strip() for topic_list in correct_topics for t in topic_list)
 
-    # Combine them to get unique topics
-    unique_topics = wrong_question_topics.union(correct_question_topics)
-    controversial_topics = wrong_question_topics.intersection(correct_question_topics)
-    wrong_topics = wrong_question_topics - controversial_topics
-    correct_topics = correct_question_topics - controversial_topics
+    #     unique_topics = wrong_question_topics.union(correct_question_topics)
+    #     controversial_topics = wrong_question_topics.intersection(correct_question_topics)
+    #     wrong_topics = wrong_question_topics - controversial_topics
+    #     correct_topics = correct_question_topics - controversial_topics
 
-    # Find controversial topics = intersection of wrong + correct topics
-    user_feedback_result_dict["controversial_topics"] = list(controversial_topics)
-    user_feedback_result_dict["wrong_topics"] = list(wrong_topics)
-    user_feedback_result_dict["correct_topics"] = list(correct_topics)
+    #     user_feedback_result_dict["controversial_topics"] = list(controversial_topics)
+    #     user_feedback_result_dict["wrong_topics"] = list(wrong_topics)
+    #     user_feedback_result_dict["correct_topics"] = list(correct_topics)
 
-    # Store the document in your database
-    new_document = Document(
-        user_id=current_user.id,
-        document_name=document_name,
-        document_topic=",".join(unique_topics),
-        document_url=file_url,
-        time_stamp=datetime.now()
-    )
-    db.session.add(new_document)
-    db.session.commit()
+    #     print(f"DEBUG: Topics successfully categorized for document: {document_name}")
+    # except Exception as e:
+    #     print(f"ERROR: Error categorizing topics for document: {document_name}. Error: {e}")
+    #     return jsonify({"error": str(e)}), 500
 
-    new_progress = UserProgress(
-        user_id=current_user.user_id,
-        date=datetime.utcnow(),
-        current_topics=",".join(unique_topics),
-        strong_topics=",".join(correct_topics),
-        weak_topics=",".join(wrong_topics),
-        feedback=user_feedback_result_dict["feedback"]
-    )
-    db.session.add(new_progress)
-    db.session.commit()
+    # # Store document in the database
+    # try:
+    #     new_document = Document(
+    #         user_id=1,  # Replace `1` with a generic or placeholder user ID
+    #         document_name=document_name,
+    #         document_topic=",".join(unique_topics),
+    #         document_url=file_url,
+    #         time_stamp=datetime.now()
+    #     )
+    #     db.session.add(new_document)
+    #     db.session.commit()
+    #     print(f"DEBUG: Document successfully stored in database: {document_name}")
+    # except Exception as e:
+    #     print(f"ERROR: Error storing document in database: {document_name}. Error: {e}")
+    #     return jsonify({"error": str(e)}), 500
 
-    # Return the full result
-    return jsonify(user_feedback_result_dict), 200
+    # # Store user progress in the database
+    # try:
+    #     new_progress = UserProgress(
+    #         user_id=1,  # Replace `1` with a generic or placeholder user ID
+    #         date=datetime.utcnow(),
+    #         current_topics=",".join(unique_topics),
+    #         strong_topics=",".join(correct_topics),
+    #         weak_topics=",".join(wrong_topics),
+    #         feedback=user_feedback_result_dict["feedback"]
+    #     )
+    #     db.session.add(new_progress)
+    #     db.session.commit()
+    #     print(f"DEBUG: User progress successfully updated.")
+    # except Exception as e:
+    #     print(f"ERROR: Error saving user progress to database. Error: {e}")
+    #     return jsonify({"error": str(e)}), 500
+
+    # # Return result
+    # print("DEBUG: Document pipeline completed successfully.")
+    # return jsonify(user_feedback_result_dict), 200
 
 @api_blueprint.route("/documents", methods=["GET"])
 @login_required
@@ -301,17 +365,30 @@ def mini_test():
     return jsonify({"score": score, "message": message}), 200
 
 @api_blueprint.route("/generate-questions", methods=["POST"])
-@login_required
 def generate_questions():
     data = request.json
     topic = data.get("topic")
+    if not topic:
+        return jsonify({"error": "Topic is required"}), 400
+
+    print(f"Generating questions for topic: {topic}")
     feedback_service = FeedbackService()
 
-    q_prompt = f"Generate 7 multiple choice questions based on the topic {topic} without any introduction or commentary.\
-        Only provide an array of 7 questions and their respective answer choices as a letter (A, B, C, D) as an array at their respoective indices."
-    questions = feedback_service.response_4o(q_prompt, [], 350)
-
-    a_prompt = f"Provide the correct answer for each question as an array of 7 letters (A, B, C, D) at their respective indices. Here are the questions {questions}"
-    answers = feedback_service.response_4o(a_prompt, [], 350)
+    q_prompt = f"Generate 3 multiple choice questions based on the topic {topic} without any introduction or commentary.\
+#         Only provide an array of 3 questions with their respective answer choices in the following JSON format: \
+#         [{{'question': '...', 'choices': {{'A': '...', 'B': '...', 'C': '...', 'D': '...'}}, 'answer': '...'}}, {{'question': '...', 'choices': {{'A': '...', 'B': '...', 'C': '...', 'D': '...'}}, 'answer': '...'}}]"
+    questions_response = feedback_service.response_4o(q_prompt, [], 350)
     
-    return jsonify({"questions": questions, "answers": answers}), 200
+    questions = [q['question'] for q in questions_response]
+    answer_choices = [q['choices'] for q in questions_response]
+    answers = [q['answer'] for q in questions_response]
+    
+    return jsonify({"questions": questions, "choices": answer_choices, "answers": answers}), 200
+
+from flask_wtf.csrf import generate_csrf
+
+@api_blueprint.route("/get-csrf-token", methods=["GET"])
+def get_csrf_token():
+    csrf_token = generate_csrf()
+    return jsonify({"csrf_token": csrf_token}), 200
+

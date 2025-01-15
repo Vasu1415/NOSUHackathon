@@ -14,15 +14,19 @@ class SignupForm(FlaskForm):
     password = PasswordField('password', validators=[InputRequired(message="Password is required"),
                                                      Length(min=8, max=64, message="Password must be between 8 and 64 characters"),
                                                      password_complexity])
-    confirm_password = PasswordField('confirm_password', validators=[InputRequired(message="Please confirm your password"),
-                                                                     EqualTo('password', message="Passwords must match")])
+    # confirm_password = PasswordField('confirm_password', validators=[InputRequired(message="Please confirm your password"),
+    #                                                                  EqualTo('password', message="Passwords must match")])
     picture = FileField('profile_picture', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
     submit = SubmitField('signup')
 
-class LoginForm(FlaskForm):
-    email = StringField('email', validators=[InputRequired(message="Email is required"),
-                                             Email(message="Invalid email address")])
-    password = PasswordField('password', validators=[InputRequired(message="Password is required")])
+class LoginForm(FlaskForm):  # Changed from FlaskForm to Form
+    email = StringField('email', validators=[
+        InputRequired(message="Email is required"),
+        Email(message="Invalid email address")
+    ])
+    password = PasswordField('password', validators=[
+        InputRequired(message="Password is required")
+    ])
     submit = SubmitField('login')
 
 class ForgotPasswordForm(FlaskForm):

@@ -204,13 +204,13 @@ class DataExtraction:
 
         return self.question_answer_dict
 
-if __name__ == "__main__":
-    pdf_file = "/Users/vasumittal/NOSUHackathon/backend/app/services/synthetic_doc_1.pdf"
-    extractor = DataExtraction()
-    result = extractor.data_extraction(pdf_file)
-    # print("=== Extracted Question-Answer Pairs ===")
-    # for idx, pairs in result.items():
-    #     for pair in pairs:
-    #         print(f"Q: {pair['question']}")
-    #         print(f"A: {pair['answer']}")
-    #         print("-----")
+# if __name__ == "__main__":
+#     pdf_file = "/Users/vasumittal/NOSUHackathon/backend/app/services/synthetic_doc_1.pdf"
+#     extractor = DataExtraction()
+#     result = extractor.data_extraction(pdf_file)
+#     # print("=== Extracted Question-Answer Pairs ===")
+#     # for idx, pairs in result.items():
+#     #     for pair in pairs:
+#     #         print(f"Q: {pair['question']}")
+#     #         print(f"A: {pair['answer']}")
+#     #         print("-----")

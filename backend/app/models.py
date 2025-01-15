@@ -24,15 +24,13 @@ class User(UserMixin,db.Model):
 
 class UserProgress(db.Model):
     __tablename__ = "user_progress"
-    progress_id = db.Column(db.Integer, primary_key=True)
+    progress_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)    
     date = db.Column(db.DateTime, default=datetime.utcnow)    
     current_topics = db.Column(db.Text, nullable=True)    
     strong_topics = db.Column(db.Text, nullable=True)    
     weak_topics = db.Column(db.Text, nullable=True)    
-    feedback = db.Column(db.Text, nullable=True)    
-    user = db.relationship("User", backref="progress_records", lazy=True)
-
+    feedback = db.Column(db.Text, nullable=True)
 
 class Document(db.Model):
     __tablename__ = "documents"

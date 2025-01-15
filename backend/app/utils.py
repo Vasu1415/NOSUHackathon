@@ -1,6 +1,6 @@
 from wtforms import ValidationError
 import re
-from .models import User
+from app.models import User
 import boto3
 import mimetypes
 from botocore.exceptions import NoCredentialsError
@@ -17,9 +17,9 @@ def password_complexity(form, field):
         raise ValidationError("Password must include at least one special character")
 
 def validate_email_unique(form, field):
-    user = User.objects(email=field.data).first()
-    if user is not None:
-        raise ValidationError('Email already taken')
+    user = User.query.filter_by(email=field.data).first()  # Use SQLAlchemy query
+    if user:
+        raise ValidationError("This email is already in use.")
 
 def upload_to_s3(file, user_id, folder, app):
     debug_logs = []

@@ -1,0 +1,102 @@
+2025-01-15 13:00:12,388 ERROR: Exception on /api/login [POST] [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py:875]
+Traceback (most recent call last):
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py", line 77, in login
+    user = User.query.filter_by(email=email).first()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask_sqlalchemy/model.py", line 22, in __get__
+    return cls.query_class(
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 275, in __init__
+    self._set_entities(entities)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 287, in _set_entities
+    self._raw_columns = [
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 288, in <listcomp>
+    coercions.expect(
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/sql/coercions.py", line 388, in expect
+    insp._post_inspect
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/util/langhelpers.py", line 1257, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/orm/mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/orm/mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/orm/mapper.py", line 4213, in _configure_registries
+    _do_configure_registries(registries, cascade)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/orm/mapper.py", line 4254, in _do_configure_registries
+    mapper._post_configure_properties()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/orm/mapper.py", line 2418, in _post_configure_properties
+    prop.init()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/orm/interfaces.py", line 589, in init
+    self.do_init()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/orm/relationships.py", line 1661, in do_init
+    self._generate_backref()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/sqlalchemy/orm/relationships.py", line 2089, in _generate_backref
+    raise sa_exc.ArgumentError(
+sqlalchemy.exc.ArgumentError: Error creating backref 'user' on relationship 'User.progress_records': property of that name exists on mapper 'Mapper[UserProgress(user_progress)]'
+2025-01-15 13:05:28,317 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 13:08:16,574 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 13:09:17,884 INFO: Signup endpoint hit [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:26]
+2025-01-15 13:09:17,944 ERROR: Exception on /api/signup [POST] [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py:875]
+Traceback (most recent call last):
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py", line 28, in signup
+    if not form.validate():
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/form.py", line 330, in validate
+    return super().validate(extra)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/form.py", line 147, in validate
+    if not field.validate(self, extra):
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/fields/core.py", line 234, in validate
+    stop_validation = self._run_validation_chain(form, chain)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/wtforms/fields/core.py", line 254, in _run_validation_chain
+    validator(form, self)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/app/utils.py", line 20, in validate_email_unique
+    user = User.objects(email=field.data).first()
+AttributeError: type object 'User' has no attribute 'objects'
+2025-01-15 13:12:09,732 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 13:14:09,710 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 13:14:37,154 INFO: Signup endpoint hit [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:26]
+2025-01-15 13:14:37,846 INFO: Creating user: work@pls.com [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:39]
+2025-01-15 13:14:38,401 INFO: User work@pls.com created successfully [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:46]
+2025-01-15 14:34:25,770 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 14:56:27,133 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 15:04:57,068 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 15:11:25,570 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 15:12:20,739 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 15:27:37,122 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 15:27:57,302 INFO: User authenticated: False [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:122]
+2025-01-15 15:27:57,356 INFO: User authenticated: False [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:122]
+2025-01-15 15:28:54,291 INFO: Flask app started [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/__init__.py:51]
+2025-01-15 15:29:14,992 INFO: User authenticated: False [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:122]
+2025-01-15 15:29:14,996 INFO: User authenticated: False [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py:122]
+2025-01-15 15:30:08,130 ERROR: Exception on /api/test-grader [POST] [in /home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py:875]
+Traceback (most recent call last):
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/env/lib/python3.10/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/vkataria/nosuHackathon/NOSUHackathon/backend/app/routes.py", line 137, in document_pipeline
+    current_app.logger.info("Document pipeline endpoint hit by user ID: %s", current_user.id)
+AttributeError: 'AnonymousUserMixin' object has no attribute 'id'

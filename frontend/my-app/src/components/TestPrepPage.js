@@ -103,7 +103,7 @@ function TestPrep() {
                                     </li>
                                     <li
                                         className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-red-600"
-                                        onClick={() => navigate('/logout')}
+                                        onClick={() => navigate('/')}
                                     >
                                         Log out
                                     </li>

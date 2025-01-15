@@ -281,8 +281,8 @@ class FeedbackService:
         }
         return result
 
-if __name__ == '__main__':
-    model_choice = 'gpt-4o' # get from frontend
-    pdf_path = "/mnt/c/Users/kamal/Downloads/sample_doc.pdf"
-    feedback_service = FeedbackService()
-    print(feedback_service.feedback_route(pdf_path, model_choice))
+# if __name__ == '__main__':
+#     model_choice = 'gpt-4o' # get from frontend
+#     pdf_path = "/mnt/c/Users/kamal/Downloads/sample_doc.pdf"
+#     feedback_service = FeedbackService()
+#     print(feedback_service.feedback_route(pdf_path, model_choice))
