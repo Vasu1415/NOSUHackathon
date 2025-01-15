@@ -13,4 +13,16 @@ flask-bcrypt
 boto3
 botocore
 mimetype
-flask-login
+azure-ai-inference
+azure-core
+azure-identity
+sentence-transformers
+fitz
+opencv-python
+pytesseract
+transformers
+pillow
+numpy
+torch
+flask_login
+frontend

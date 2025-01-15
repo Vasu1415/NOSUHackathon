@@ -34,8 +34,6 @@ class FeedbackService:
                 max_tokens=max_tokens,
                 top_p=1
             )
-            content = response.choices[0].message.content
-            answers = ast.literal_eval(content) if isinstance(ast.literal_eval(content), list) else [content]
         except Exception as e:
             print(f"Error with GPT 4o: {e}")
             answers = [""] * len(questions)
@@ -146,10 +144,6 @@ class FeedbackService:
 
     def multimodel_responses(self, questions):
         threshold_sim = 0.75
-        
-        # answers_4o = response_4o(questions)
-        # answers_llama = response_llama(questions)
-        # answers_mistral = response_mistral(questions)
         prompt = "Answer the following questions and return the output as an\
         array of answers for their respective questions at their respective indices. Write each answer in around 150 words:\n"
         tasks = {
