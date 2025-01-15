@@ -5,16 +5,14 @@ import { FaTachometerAlt, FaFileAlt, FaFileUpload } from 'react-icons/fa'; // Im
 const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: <FaTachometerAlt /> },
     { name: 'Test Grader', path: '/test-grader', icon: <FaFileUpload /> },
-    { name: 'Test Generator', path: '/test-generator', icon: <FaFileAlt /> },
+    { name: 'Mini Test', path: '/mini-test', icon: <FaFileAlt /> },
 ];
-
 function Documents (){
     const navigate = useNavigate();
     const location = useLocation();
     const [activeTab, setActiveTab] = useState('');
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
     const [profilePicture, setProfilePicture] = useState('');
-    const [userEmail, setUserEmail] = useState('');
 
 
     const handleNavigation = (path) => {
@@ -35,7 +33,6 @@ function Documents (){
                 const response = await fetch('/api/user-profile'); // Adjust the endpoint as necessary
                 const data = await response.json();
                 setProfilePicture(data.profile_picture_url);
-                setUserEmail(data.email);
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }
@@ -83,38 +80,28 @@ function Documents (){
                 {/* Profile Icon */}
                 <div className="absolute top-6 right-6">
                     <div className="relative">
-                        <img
-                            src={profilePicture || '/path/to/default-profile.jpg'}
-                            alt="Profile"
+                        {/*MAKE SURE THE PROFILE API CALL IS CORRECTLY*/}
+                        <img src={profilePicture || '/path/to/default-profile.jpg'} alt="Profile"
                             className="w-12 h-12 rounded-full cursor-pointer border-2 border-rose-400"
-                            onClick={toggleProfileMenu}
-                        />
+                            onClick={toggleProfileMenu} />
+
                         {profileMenuOpen && (
                             <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg">
                                 <ul className="py-2">
-                                    <li className="px-4 py-2 hover:bg-gray-200">{userEmail}</li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => handleNavigation('/update-profile')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold  border-b border-gray-300 text-lg"
+                                        onClick={() => handleNavigation('/update-profile')} >
                                         Update Profile
                                     </li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => handleNavigation('/documents')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold border-b border-gray-300 text-lg"
+                                        onClick={() => handleNavigation('/documents')} >
                                         Documents
                                     </li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => handleNavigation('/progress')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold border-b border-gray-300 text-lg"
+                                        onClick={() => handleNavigation('/progress')} >
                                         Progress
                                     </li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-red-600"
-                                        onClick={() => navigate('/logout')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-red-600 font-semibold text-lg"
+                                        onClick={() => navigate('/logout')} >
                                         Log out
                                     </li>
                                 </ul>

@@ -5,7 +5,7 @@ import { FaTachometerAlt, FaFileAlt, FaFileUpload } from 'react-icons/fa'; // Im
 const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: <FaTachometerAlt /> },
     { name: 'Test Grader', path: '/test-grader', icon: <FaFileUpload /> },
-    { name: 'Test Generator', path: '/test-generator', icon: <FaFileAlt /> },
+    { name: 'Mini Test', path: '/mini-test', icon: <FaFileAlt /> },
 ];
 
 function MainPage() {
@@ -16,7 +16,6 @@ function MainPage() {
 
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
     const [profilePicture, setProfilePicture] = useState('');
-    const [userEmail, setUserEmail] = useState('');
 
 
 
@@ -39,7 +38,6 @@ function MainPage() {
                 const response = await fetch('/api/user-profile'); // Adjust the endpoint as necessary
                 const data = await response.json();
                 setProfilePicture(data.profile_picture_url);
-                setUserEmail(data.email);
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }
@@ -89,38 +87,28 @@ function MainPage() {
                 {/* Profile Icon */}
                 <div className="absolute top-6 right-6">
                     <div className="relative">
-                        <img
-                            src={profilePicture || '/path/to/default-profile.jpg'}
-                            alt="Profile"
+                        {/*MAKE SURE THE PROFILE API CALL IS CORRECTLY*/}
+                        <img src={profilePicture || '/path/to/default-profile.jpg'} alt="Profile"
                             className="w-12 h-12 rounded-full cursor-pointer border-2 border-rose-400"
-                            onClick={toggleProfileMenu}
-                        />
+                            onClick={toggleProfileMenu} />
+
                         {profileMenuOpen && (
                             <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg">
                                 <ul className="py-2">
-                                    <li className="px-4 py-2 hover:bg-gray-200">{userEmail}</li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => handleNavigation('/update-profile')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold  border-b border-gray-300 text-lg"
+                                        onClick={() => handleNavigation('/update-profile')} >
                                         Update Profile
                                     </li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => handleNavigation('/documents')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold border-b border-gray-300 text-lg"
+                                        onClick={() => handleNavigation('/documents')} >
                                         Documents
                                     </li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => handleNavigation('/progress')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold border-b border-gray-300 text-lg"
+                                        onClick={() => handleNavigation('/progress')} >
                                         Progress
                                     </li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-red-600"
-                                        onClick={() => navigate('/logout')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-red-600 font-semibold text-lg"
+                                        onClick={() => navigate('/logout')} >
                                         Log out
                                     </li>
                                 </ul>
@@ -128,6 +116,7 @@ function MainPage() {
                         )}
                     </div>
                 </div>
+
                 <header className='mb-8 text-center'>
                     <h2 className="text-6xl font-bold text-center mt-20 text-white">Welcome</h2>
                     <p className="text-gray-400 mt-2 text-center text-2xl">Some blurb here idk</p>
@@ -136,7 +125,7 @@ function MainPage() {
                 {/*Icon cards*/}
                 <div className="grid grid-cols-1 gap-6 mt-20">
                     {menuItems
-                        .filter((item) => item.name === 'Test Grader' || item.name === 'Test Generator')
+                        .filter((item) => item.name === 'Test Grader' || item.name === 'Mini Test')
                         .map((item) => (
                             <div
                                 key={item.name}
@@ -153,7 +142,6 @@ function MainPage() {
                                         ? 'This tool helps you grade tests automatically, saving time and improving accuracy.'
                                         : 'Generate custom tests with various difficulty levels and question types.'}
                                 </p>
-
 
                                 {/* Background Color Change on Hover */}
                                 <div

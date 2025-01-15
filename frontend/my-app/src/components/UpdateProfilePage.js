@@ -5,7 +5,7 @@ import { FaTachometerAlt, FaFileAlt, FaFileUpload } from 'react-icons/fa'; // Im
 const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: <FaTachometerAlt /> },
     { name: 'Test Grader', path: '/test-grader', icon: <FaFileUpload /> },
-    { name: 'Test Generator', path: '/test-generator', icon: <FaFileAlt /> },
+    { name: 'Mini Test', path: '/mini-test', icon: <FaFileAlt /> },
 ];
 
 function UpdateProfile(){
@@ -29,7 +29,7 @@ function UpdateProfile(){
         e.preventDefault();
         setError(null);
 
-        const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+        const passwordStrengthRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+\\|[\]{};:/?.>]).{8,}$/;
         if (!passwordStrengthRegex.test(newPassword)) {
             setError('Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character.');
             return;

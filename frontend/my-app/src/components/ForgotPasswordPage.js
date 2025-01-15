@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 
 
 function ForgotPasswordPage(){
@@ -8,13 +10,14 @@ function ForgotPasswordPage(){
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const navigate = useNavigate();
 
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
         setError(null);
 
-        const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+        const passwordStrengthRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+\\|[\]{};:/?.>]).{8,}$/;
         if (!passwordStrengthRegex.test(newPassword)) {
             setError('Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character.');
             return;
@@ -26,7 +29,7 @@ function ForgotPasswordPage(){
         }
 
         try {
-            const response = await fetch ('/api/forgot-password', {
+            const response = await fetch ('http://127.0.0.1:5000/api/forgot-password', {
                 method: 'POST',
                 headers: {'Content-Type':'application/json'},
                 body: JSON.stringify({email, new_password: newPassword}),
@@ -45,6 +48,12 @@ function ForgotPasswordPage(){
 
     return (
         <div className="min-h-screen flex flex-col justify-center items-center bg-slate-950 text-white p-4">
+            {/*Back Button */}
+            <button onClick={() => navigate('/login')} 
+                className="absolute top-4 left-4 p-2 bg-gray-200 text-slate-950 rounded-full hover:bg-gray-300" >
+                <ArrowLeftIcon className="h-6 w-6" />
+            </button>
+            
             <h1 className="text-4xl font-bold text-center mb-8" >Reset Password</h1>
 
             <form onSubmit={handleResetPassword} className="bg-gray-50 p-8 rounded-lg shadow-lg w-full max-w-md space-y-6" >
@@ -72,11 +81,12 @@ function ForgotPasswordPage(){
                     <label htmlFor="showPassword" className="text-lg text-gray-700">Show Password</label>
                 </div>
 
-                {error && <p className='text-red-600 text-center'>{error}</p>}
+                {error && <p className='w-full py-3 text-rose-600 '>{error}</p>}
                 {success && <p className='text-green-600 text-center'>{success}</p>}
 
                 <button type='submit' className='w-full py-3 bg-rose-600 text-white font-bold rounded-lg hover:bg-rose-700 disabled:bg-gray-400 disabled:cursor-not-allowed'>Reset Password</button>
             </form>
+            
 
         </div>
     );

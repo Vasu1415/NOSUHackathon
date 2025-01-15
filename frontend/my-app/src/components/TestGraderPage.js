@@ -5,19 +5,18 @@ import { FaTachometerAlt, FaFileAlt, FaFileUpload } from 'react-icons/fa'; // Im
 const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: <FaTachometerAlt /> },
     { name: 'Test Grader', path: '/test-grader', icon: <FaFileUpload /> },
-    { name: 'Test Generator', path: '/test-generator', icon: <FaFileAlt /> },
+    { name: 'Mini Test', path: '/mini-test', icon: <FaFileAlt /> },
 ];
 
 function TestGrader (){
     const navigate = useNavigate();
     const [uploadedFile, setUploadedFile] = useState(null);
     const [selectedModel, setSelectedModel] = useState('');
-    const location = useLocation();
+    
     const [activeTab, setActiveTab] = useState('');
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
     const [profilePicture, setProfilePicture] = useState('');
-    const [userEmail, setUserEmail] = useState('');
-
+    const location = useLocation();
     const [error, setError] = useState(null);
 
 
@@ -76,7 +75,6 @@ function TestGrader (){
                 const response = await fetch('/api/user-profile'); // Adjust the endpoint as necessary
                 const data = await response.json();
                 setProfilePicture(data.profile_picture_url);
-                setUserEmail(data.email);
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }
@@ -124,38 +122,28 @@ function TestGrader (){
                 {/* Profile Icon */}
                 <div className="absolute top-6 right-6">
                     <div className="relative">
-                        <img
-                            src={profilePicture || '/path/to/default-profile.jpg'}
-                            alt="Profile"
+                        {/*MAKE SURE THE PROFILE API CALL IS CORRECTLY*/}
+                        <img src={profilePicture || '/path/to/default-profile.jpg'} alt="Profile"
                             className="w-12 h-12 rounded-full cursor-pointer border-2 border-rose-400"
-                            onClick={toggleProfileMenu}
-                        />
+                            onClick={toggleProfileMenu} />
+
                         {profileMenuOpen && (
                             <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg">
                                 <ul className="py-2">
-                                    <li className="px-4 py-2 hover:bg-gray-200">{userEmail}</li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => handleNavigation('/update-profile')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold  border-b border-gray-300 text-lg"
+                                        onClick={() => handleNavigation('/update-profile')} >
                                         Update Profile
                                     </li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => handleNavigation('/documents')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold border-b border-gray-300 text-lg"
+                                        onClick={() => handleNavigation('/documents')} >
                                         Documents
                                     </li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => handleNavigation('/progress')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold border-b border-gray-300 text-lg"
+                                        onClick={() => handleNavigation('/progress')} >
                                         Progress
                                     </li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-red-600"
-                                        onClick={() => navigate('/logout')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-red-600 font-semibold text-lg"
+                                        onClick={() => navigate('/logout')} >
                                         Log out
                                     </li>
                                 </ul>
@@ -174,11 +162,11 @@ function TestGrader (){
                 {/* Upload Container */}
                 <div className="flex flex-col items-center justify-center border-2 border-dashed border-rose-400 rounded-xl p-12 bg-rose-200 bg-opacity-15 w-full max-w-4xl min-h-[60vh] mx-auto" 
                     onDragOver={handleDragOver} onDrop={handleDrop}>
-                    <p className='text-3xl font-medium mb-6 text-rose-700'>Click to upload, or drag your PDF file here</p>
+                    <p className='text-3xl font-bold mb-6 text-rose-700 '>Click to upload, or drag your PDF file here</p>
 
                     {/*File Upload */}
                     <input type='file' accept='.pdf' className='hidden' id='file-upload' onChange={handleFileUpload} />
-                    <label htmlFor='file-upload' className='text-xl cursor-pointer px-10 py-4 bg-rose-600 text-white rounded-lg hover:bg-rose-700'>Upload PDF</label>
+                    <label htmlFor='file-upload' className='text-xl cursor-pointer px-10 py-4 bg-rose-600 text-white rounded-lg hover:bg-rose-700 font-bold'>Upload PDF</label>
 
                     {uploadedFile && (
                         <div className='mt-6 p-4 border border-gray-300 rounded-lg bg-gray-50 w-full max-w-lg'>
@@ -190,11 +178,11 @@ function TestGrader (){
 
                     {/*Model Section*/ }
                     <div className='mt-8 w-full max-w-md flex flex-col items-center pt-10'>
-                        <lable htmlFor='model-select' className='block text-3xl font-medium mb-4 text-rose-700'>
-                            Select Model:
+                        <lable htmlFor='model-select' className='block text-3xl mb-4 text-rose-700 font-bold'>
+                            Select Model for Feedback:
                         </lable>
                         <select id='model-select' value={selectedModel} onChange={handleModelChange} 
-                            className='w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 foucs:ring-rose-600'>
+                            className='w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 foucs:ring-rose-600 font-bold'>
 
                             <option value="">-- Select a model --</option>
                             <option value="model-1">Model 1</option>
@@ -208,7 +196,7 @@ function TestGrader (){
 
                     {/* Submit Button */}
                     <button onClick={handleSubmit} 
-                        className='text-xl mt-8 px-10 py-4 bg-rose-600 text-white rounded-lg hover:bg-rose-700 disabled:bg-gray-300 disabled:cursor-not-allowed'
+                        className='text-xl mt-8 px-10 py-4 bg-rose-600 text-white rounded-lg hover:bg-rose-700 disabled:bg-gray-300 disabled:cursor-not-allowed font-bold'
                         disabled={!uploadedFile || !selectedModel}>
                         Submit
                     </button>

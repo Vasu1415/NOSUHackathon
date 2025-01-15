@@ -5,7 +5,7 @@ import { FaTachometerAlt, FaFileAlt, FaFileUpload } from 'react-icons/fa'; // Im
 const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: <FaTachometerAlt /> },
     { name: 'Test Grader', path: '/test-grader', icon: <FaFileUpload /> },
-    { name: 'Test Generator', path: '/test-generator', icon: <FaFileAlt /> },
+    { name: 'Mini Test', path: '/mini-test', icon: <FaFileAlt /> },
 ];
 
 function Progress (){
@@ -14,7 +14,7 @@ function Progress (){
     const [activeTab, setActiveTab] = useState('');
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
     const [profilePicture, setProfilePicture] = useState('');
-    const [userEmail, setUserEmail] = useState('');
+
     const [topics, setTopics] = useState([]);
     const [selectedTopic, setSelectedTopic] = useState('');
     const [graphData, setGraphData] = useState(null);
@@ -39,7 +39,7 @@ function Progress (){
                 const response = await fetch('/api/user-profile'); // Adjust the endpoint as necessary
                 const data = await response.json();
                 setProfilePicture(data.profile_picture_url);
-                setUserEmail(data.email);
+ 
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }
@@ -90,38 +90,28 @@ function Progress (){
                 {/* Profile Icon */}
                 <div className="absolute top-6 right-6">
                     <div className="relative">
-                        <img
-                            src={profilePicture || '/path/to/default-profile.jpg'}
-                            alt="Profile"
+                        {/*MAKE SURE THE PROFILE API CALL IS CORRECTLY*/}
+                        <img src={profilePicture || '/path/to/default-profile.jpg'} alt="Profile"
                             className="w-12 h-12 rounded-full cursor-pointer border-2 border-rose-400"
-                            onClick={toggleProfileMenu}
-                        />
+                            onClick={toggleProfileMenu} />
+
                         {profileMenuOpen && (
                             <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg">
                                 <ul className="py-2">
-                                    <li className="px-4 py-2 hover:bg-gray-200">{userEmail}</li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => handleNavigation('/update-profile')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold  border-b border-gray-300 text-lg"
+                                        onClick={() => handleNavigation('/update-profile')} >
                                         Update Profile
                                     </li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => handleNavigation('/documents')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold border-b border-gray-300 text-lg"
+                                        onClick={() => handleNavigation('/documents')} >
                                         Documents
                                     </li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                        onClick={() => handleNavigation('/progress')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer font-semibold border-b border-gray-300 text-lg"
+                                        onClick={() => handleNavigation('/progress')} >
                                         Progress
                                     </li>
-                                    <li
-                                        className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-red-600"
-                                        onClick={() => navigate('/logout')}
-                                    >
+                                    <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-red-600 font-semibold text-lg"
+                                        onClick={() => navigate('/logout')} >
                                         Log out
                                     </li>
                                 </ul>
@@ -132,35 +122,15 @@ function Progress (){
 
                 {/*Header */}
                 <header className='mb-8 text-center'>
-                    <h2 className="text-6xl font-bold text-center mt-20 text-white">Progress</h2>
+                    <h2 className="text-6xl font-bold text-center mt-20 text-white">Review Exams</h2>
                     <p className="text-gray-400 mt-2 text-center text-2xl">See your progress on your graded exams.</p>
 
                 </header>
 
-                {/* Topics Dropdown */}
-                <div className=''>
-
-                </div>
+                
 
 
-                {/* Graph Section */}
-                <div className="grid grid-cols-2 gap-6 mt-20">
-                    <div className="bg-gray-50 p-6 rounded shadow">
-                        <h3 className="mb-4 text-gray-700">Graphs hyrhyrhyr</h3>
-                        <div className="h-48">
-                        {/* Placeholder for Chart */}
-                        <div className="w-full h-full bg-rose-200"></div>
-                        </div>
-                    </div>
-
-                    <div className="bg-gray-50 p-6 rounded shadow">
-                        <h3 className="mb-4 text-gray-700">Feedback or smth idk</h3>
-                        <div className="h-48">
-                        {/* Placeholder for Bar Chart */}
-                        <div className="w-full h-full bg-rose-200"></div>
-                        </div>
-                    </div>
-                </div>
+                
 
             </main>
         </div>

@@ -7,7 +7,7 @@ import LoginPage from './components/LoginPage';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
 import MainPage from './components/MainPage';
 
-import TestGenerator from './components/TestGenerator';
+import MiniTest from './components/MiniTestPage';
 import TestGrader from './components/TestGraderPage';
 import Progress from './components/ProgressPage';
 import Documents from './components/DocumentsPage';
@@ -23,7 +23,7 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/forgot-password' element={<ForgotPasswordPage />} />
         <Route path='/dashboard' element={<MainPage />} />
-        <Route path="/test-generator" element={<TestGenerator />} />
+        <Route path="/mini-test" element={<MiniTest />} />
         <Route path="/test-grader" element={<TestGrader />} />
         <Route path="/progress" element={<Progress />} />
         <Route path='/documents' element={<Documents/>} />
