@@ -12,7 +12,7 @@ As university students, we often felt the lack of meaningful feedback in our lea
 
 ---
 
-## Features
+## How We Built It 
 
 ### 1. **Data Extraction Pipeline**
 We designed a token classification model to predict questions and answers from documents:
@@ -36,16 +36,6 @@ Using the data extraction results, we developed a feedback pipeline to evaluate 
 The platform supports the creation of personalized practice materials:
 - Users can specify topics they need more practice on.
 - The system generates MCQ-based mini-tests tailored to the user’s preferences and learning needs.
-
----
-
-## How We Built It
-- Designed and annotated a synthetic dataset using Cohere's text generation model and the CVAT annotation tool for training a Token Classification/Question Answer classification model.
-- Integrated results from the data extraction pipeline with the feedback pipeline, leveraging LLAMA, GPT-4o, and MISTRAL models to generate constructive feedback and evaluate user responses.
-- Developed dynamic, time-based mini-tests using the same model technologies, based on user-selected topics.
-- Used Postgres as a local database and connected it via Docker.
-
----
 
 ## What's Next for StudyBuddy.io
 - Successfully integrate the feedback and data extraction pipelines.
